@@ -1,14 +1,10 @@
-from FaceDetection import *
+from keras.models import load_model
+from PIL import Image, ImageOps
+import numpy as np
+import cv2
 from Preprocessing import *
+from FaceDetection import *
 
-# get the path of files
-currentPath = os.getcwd()
-dataFold = os.path.join(currentPath, "Data")
-
-newData = os.path.join(dataFold, "Enzo")
-
-# get the image
-# img = cv2.imread(os.path.join(newData, "Enzo_0001.jpg"), 1)
 
 # get the video capture
 cam = cv2.VideoCapture(0)
@@ -25,32 +21,38 @@ while cam.isOpened():
         print("Can't receive frame. Exiting ...")
         break
 
-    # resizing the picture to make it smaller
-    if frame.shape[0] > 1500:
-        scale = 50 / 100
-        frame = resize(frame, scale)
+    # detect the frontal face
+    face_coord = frontalFaceDetection(frame)
 
-    # detect the face
-    face_coord = faceDetection(frame)
+    # detect profile face
+    if len(face_coord) == 0:
+        face_coord = profileFaceDetection(frame)
 
-    # crop the frame around the face if there is only one detected
-    scale_around_face = 40 / 100
-
-    if len(face_coord) == 1:
-        frame = crop(frame, face_coord[0], scale_around_face)
-
-    # find the face if there is more than one face detected
-    if len(face_coord) > 1:
+    # crop the frame around the face
+    if len(face_coord) > 0:
+        biggest_rectangle = face_coord[0]
         x1_big, y1_big, x2_big, y2_big = face_coord[0]
 
         for (x1, y1, x2, y2) in face_coord:
-            cv2.rectangle(frame, (x1, y1), (x1 + x2, y1 + y2), (255, 0, 0), 2)  # draw a rectangle around every detected faces
 
+            # find the biggest face among the detected ones
             if (x1_big < x1 and y1_big < y1) or (x1_big + x2_big < x1 + x2 and y1_big + y2_big < y1 + y2):
                 biggest_rectangle = (x1, y1, x2, y2)
 
-        # crop the frame around the biggest detected face
-        frame = crop(frame, biggest_rectangle, scale_around_face)
+            # crop the frame around the face
+            scale_around_face = 40 / 100
+            roi = crop(frame, biggest_rectangle, scale_around_face)
+
+            # draw a rectangle around every detected faces for the video
+            rectangle_color = (255, 0, 0)
+            thickness = 2
+            cv2.rectangle(frame, (x1, y1), (x1 + x2, y1 + y2), rectangle_color, thickness)
+            frame = crop(frame, biggest_rectangle, scale_around_face)
+
+    # resize the image to 224px by 224px
+    row, col, rgb = frame.shape
+    scale = 224/row
+    frame = resize(frame, scale)
 
     # display the capture
     cv2.imshow("frame", frame)

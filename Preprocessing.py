@@ -26,3 +26,11 @@ def crop(img, face_coord, scale_around_face):
         img = img[x1 - int(scale_around_face * x2): x1 + x2 + int(scale_around_face * x2), y1 - int(scale_around_face * x2): y1 + y2 + int(scale_around_face * x2)]
 
     return img
+
+def normalize(array):
+    # Normalize  image array
+    array = (array.astype(np.float32) / 127.5) - 1
+
+    return array
+
+# brightness

@@ -1,14 +1,33 @@
 import os
+import keras as ker
+import tensorflow as tf
 
-currentPath = os.getcwd()
-dataFold = os.path.join(currentPath, "Data")
+BASE_DIR = os.getcwd()
+dataFold = os.path.join(BASE_DIR, "Data")
 
-trainingData = os.path.join(dataFold, "lfw")
+trainingData = os.path.join(dataFold, "DataSet")
 
-# training data for tests
-count = 0
-for dirs in os.listdir(trainingData):
-    face = os.path.join(trainingData, dirs)
-    for pics in os.listdir(face):
-        count += 1
-print(count)
+# Creating the neural network
+model = ker.models.Sequential()
+
+# Input layer
+model.add(ker.layers.Dense(units=3, input_shape=[1]))
+
+# Intermediate layer
+model.add(ker.layers.Dense(units=2))
+
+# Output layer
+model.add(ker.layers.Dense(units=1))
+
+# compile the neural network
+model.compile(loss='mean_squared_error', optimizer='sgd')
+
+faces = []
+names = []
+
+# transmit training data to the NN
+model.fit(x=faces, y=names, epochs=1000)
+
+# to predict result
+random_person = os.path.join(dataFold, "n000001")
+model.predict(os.path.join(random_person, "0010_01.jpg"))
