@@ -5,21 +5,16 @@ import tensorflow as tf
 BASE_DIR = os.getcwd()
 dataFold = os.path.join(BASE_DIR, "Data")
 
-trainingData = os.path.join(dataFold, "DataSet")
+trainingData = os.path.join(dataSet, "TrainingData")
+testData = os.path.join(dataSet, "TestData")
 
-images_path = []
-for dirs in os.listdir(trainingData):
-    path = os.path.join(trainingData, dirs)
-    if os.path.isdir(path):
-        for file in os.listdir(path):
-            if file.endswith("png") or file.endswith("jpg"):
-                images_path += [os.path.join(path, file)]
+train_img = tf.data.Dataset.list_files(os.path.join(trainingData, "Images", "*.jpg"), shuffle=False)
+train_img = train_img.map(cv2.imread)
 
-print(images_path)
+test_img = tf.data.Dataset.list_files(os.path.join(testData, "Images", "*.jpg"), shuffle=False)
+test_img = test_img.map(load_image)
 
-# train_img = tf.data.Dataset.
-# train_label = tf.data.Dataset
-"""
+
 # Creating the neural network
 model = ker.models.Sequential()
 
@@ -35,12 +30,10 @@ model.add(ker.layers.Dense(units=1))
 # compile the neural network
 model.compile(loss='mean_squared_error', optimizer='sgd')
 
-faces = []
-names = []
 
 # transmit training data to the NN
-model.fit(x=faces, y=names, epochs=1000)
+# model.fit(x=faces, y=names, epochs=1000)
 
 # to predict result
-random_person = os.path.join(dataFold, "n000001")"""
+# random_person = os.path.join(dataFold, "n000001")
 # model.predict(os.path.join(random_person, "0010_01.jpg"))

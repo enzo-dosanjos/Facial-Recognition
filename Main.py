@@ -34,7 +34,6 @@ while cam.isOpened():
         x1_big, y1_big, x2_big, y2_big = face_coord[0]
 
         for (x1, y1, x2, y2) in face_coord:
-
             # find the biggest face among the detected ones
             if (x1_big < x1 and y1_big < y1) or (x1_big + x2_big < x1 + x2 and y1_big + y2_big < y1 + y2):
                 biggest_rectangle = (x1, y1, x2, y2)

@@ -85,7 +85,7 @@ for dirs in os.listdir(VGG2):
                 img = resize(img, size)
 
                 # name the label files
-                label_file = file.split('.')[0] + '.json'
+                label_file = identity[dirs].replace("\"", "") + "_" + file.split('.')[0] + '.json'
 
                 # distribute 80% of images into training images
                 if random.random() < 0.80:
@@ -93,7 +93,7 @@ for dirs in os.listdir(VGG2):
                     image_path = os.path.join(trainingData, "Images")
                     # write the image
                     os.chdir(image_path)
-                    cv2.imwrite(file, img)
+                    cv2.imwrite(identity[dirs].replace("\"", "") + "_" + file, img)
                     # get the path for the label
                     label_path = os.path.join(trainingData, "Labels", label_file)
 
@@ -103,7 +103,7 @@ for dirs in os.listdir(VGG2):
                     image_path = os.path.join(testData, "Images")
                     # write the image
                     os.chdir(image_path)
-                    cv2.imwrite(file, img)
+                    cv2.imwrite(identity[dirs].replace("\"", "") + "_" + file, img)
                     # get the path for the label
                     label_path = os.path.join(testData, "Labels", label_file)
 
@@ -112,7 +112,7 @@ for dirs in os.listdir(VGG2):
                     open(label_path, 'a').close()
 
                 # put data in label files
-                label_dict = {'path': os.path.join(image_path, file), 'name': identity[dirs],
+                label_dict = {'path': os.path.join(image_path, file), 'name': identity[dirs].replace("\"", ""),
                               'face_coord': [int(x1_big), int(y1_big), int(x1_big + x2_big), int(y1_big + y2_big)]}
                 json_object = json.dumps(label_dict, indent=4)
                 with open(label_path, 'w') as label:

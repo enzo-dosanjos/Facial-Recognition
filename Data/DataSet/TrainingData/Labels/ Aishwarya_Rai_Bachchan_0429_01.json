@@ -1,0 +1,10 @@
+{
+    "path": "C:\\Users\\colin\\Documents\\GitHub\\Facial-Recognition\\Data\\DataSet\\TrainingData\\Images\\0429_01.jpg",
+    "name": " Aishwarya_Rai_Bachchan",
+    "face_coord": [
+        85,
+        133,
+        303,
+        351
+    ]
+}

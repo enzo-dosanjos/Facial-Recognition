@@ -1,6 +1,6 @@
 make myself the face detection deep learning algorithm (VGG16)
 detect brightness in a picture and create an "increase_brightness" function
-
+crop the image on every faces in main
 
 """ keras
 # Create the array of the right shape to feed into the keras model

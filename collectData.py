@@ -34,12 +34,7 @@ while cam.isOpened():
         print("Can't receive frame. Exiting ...")
         break
 
-    # resizing the picture to make it smaller
-    if frame.shape[0] > 1500:
-        scale = 50 / 100
-        frame = resize(frame, scale)
-
-    # detect the frontal face
+    # detect frontal face
     face_coord = frontalFaceDetection(frame)
 
     # detect profile face
@@ -48,18 +43,20 @@ while cam.isOpened():
 
     # crop the frame around the face
     if len(face_coord) > 0:
-        biggest_rectangle = face_coord[0]
         x1_big, y1_big, x2_big, y2_big = face_coord[0]
 
         for (x1, y1, x2, y2) in face_coord:
-
             # find the biggest face among the detected ones
             if (x1_big < x1 and y1_big < y1) or (x1_big + x2_big < x1 + x2 and y1_big + y2_big < y1 + y2):
-                biggest_rectangle = (x1, y1, x2, y2)
+                x1_big, y1_big, x2_big, y2_big = (x1, y1, x2, y2)
 
             # crop the frame around the face
-            scale_around_face = 40 / 100
-            roi = crop(frame, biggest_rectangle, scale_around_face)
+            scale_around_face = 1 / 100
+            roi = crop(frame, (x1_big, y1_big, x2_big, y2_big), scale_around_face)
+
+            # resize the image to 224px by 224px
+            size = 224
+            roi = resize(roi, size)
 
             # save the image of the face
             cv2.imwrite(os.path.join(newDataFold, str(count) + ".png"), roi)
@@ -71,7 +68,6 @@ while cam.isOpened():
             rectangle_color = (255, 0, 0)
             thickness = 2
             cv2.rectangle(frame, (x1, y1), (x1 + x2, y1 + y2), rectangle_color, thickness)
-            frame = crop(frame, biggest_rectangle, scale_around_face)
 
     if count > 299:
         break
