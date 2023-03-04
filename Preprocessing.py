@@ -3,13 +3,9 @@ import cv2
 from math import sqrt
 
 
-def resize(img, scale):
-    row, col, rgb = img.shape
+def resize(img, size):
 
-    new_row = int(row * scale)
-    new_col = int(col * scale)
-
-    img = cv2.resize(img, (new_col, new_row))
+    img = cv2.resize(img, (size, size))
 
     return img
 
