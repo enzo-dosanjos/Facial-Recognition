@@ -1,0 +1,10 @@
+{
+    "path": "C:\\Users\\colin\\Documents\\GitHub\\Facial-Recognition\\Data\\DataSet\\TestData\\Images\\0107_01.jpg",
+    "name": " Alex_Gonzaga",
+    "face_coord": [
+        84,
+        123,
+        260,
+        299
+    ]
+}

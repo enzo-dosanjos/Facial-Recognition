@@ -85,37 +85,46 @@ for dirs in os.listdir(VGG2):
                 img = resize(img, size)
 
                 # name the label files
-                label_file = identity[dirs].replace("\"", "") + "_" + file.split('.')[0] + '.json'
+                label_file = file.split('.')[0] + '.json'
 
                 # distribute 80% of images into training images
                 if random.random() < 0.80:
                     trainingData = os.path.join(dataSet, "TrainingData")
                     image_path = os.path.join(trainingData, "Images")
-                    # write the image
-                    os.chdir(image_path)
-                    cv2.imwrite(identity[dirs].replace("\"", "") + "_" + file, img)
-                    # get the path for the label
-                    label_path = os.path.join(trainingData, "Labels", label_file)
+                    label_path = os.path.join(trainingData, "Labels")
 
-                # distribute 20% of images into training images
+                # distribute 20% of images into test images
                 else:
                     testData = os.path.join(dataSet, "TestData")
                     image_path = os.path.join(testData, "Images")
-                    # write the image
-                    os.chdir(image_path)
-                    cv2.imwrite(identity[dirs].replace("\"", "") + "_" + file, img)
-                    # get the path for the label
-                    label_path = os.path.join(testData, "Labels", label_file)
+                    label_path = os.path.join(testData, "Labels")
+
+                # get the path for the people files
+                person_img_path = os.path.join(image_path, identity[dirs].replace("\"", ""))
+                person_label_path = os.path.join(label_path, identity[dirs].replace("\"", ""))
+
+                # create a directory for each people
+                if not os.path.exists(person_img_path):
+                    os.mkdir(person_img_path)
+                if not os.path.exists(person_label_path):
+                    os.mkdir(person_label_path)
+
+                # write the image
+                os.chdir(person_img_path)
+                cv2.imwrite(file, img)
+
+                # get the path for the label
+                label_file_path = os.path.join(person_label_path, label_file)
 
                 # create the label file if it does not exist
-                if not os.path.exists(label_path):
-                    open(label_path, 'a').close()
+                if not os.path.exists(label_file_path):
+                    open(label_file_path, 'a').close()
 
                 # put data in label files
                 label_dict = {'path': os.path.join(image_path, file), 'name': identity[dirs].replace("\"", ""),
                               'face_coord': [int(x1_big), int(y1_big), int(x1_big + x2_big), int(y1_big + y2_big)]}
                 json_object = json.dumps(label_dict, indent=4)
-                with open(label_path, 'w') as label:
+                with open(label_file_path, 'w') as label:
                     label.write(json_object)
     i += 1
     print(f"person {i} done")

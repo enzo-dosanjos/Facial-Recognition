@@ -35,7 +35,7 @@ def profileFaceDetection(img):
     grey_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # detect faces
-    scale_factor = 1.1  # resizing scale factor
+    scale_factor = 1.3  # resizing scale factor
     min_neighbor = 5  # number of neighbor each candidate rectangle should have to retain it
     profile_face_coord = face_cascade.detectMultiScale(grey_img, scale_factor, min_neighbor)
 
