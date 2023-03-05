@@ -1,5 +1,5 @@
 import os
-import json
+import pickle
 
 from keras_vggface.vggface import VGGFace
 
@@ -72,12 +72,12 @@ custom_vgg_model.fit(train_generator,
 custom_vgg_model.save(os.path.join(dataFold, "face_recognition_cnn.h5"))
 
 # save the classes to txt
-label_filename = 'face_labels.json'
+label_filename = 'face_labels.pkl'
 label_file_path = os.path.join(dataFold, label_filename)
 class_dictionary = train_generator.class_indices
-label_dict = {
+identity = {
     value: key for key, value in class_dictionary.items()
 }
-json_object = json.dumps(label_dict, indent=4)
-with open(label_file_path, 'w') as label:
-    label.write(json_object)
+with open(label_file_path, 'wb') as f:
+    pickle.dump(identity, f)
+

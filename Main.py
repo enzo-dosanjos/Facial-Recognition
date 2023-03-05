@@ -1,8 +1,8 @@
 from keras.models import load_model
 import cv2
 import os
+import pickle
 import numpy as np
-import json
 from Preprocessing import resize, crop
 from FaceDetection import frontalFaceDetection, profileFaceDetection
 
@@ -17,7 +17,8 @@ np.set_printoptions(suppress=True)
 model = load_model(os.path.join(dataFold, "face_recognition_cnn.h5"), compile=False)
 
 # Load the labels
-class_names = open(os.path.join(dataFold, "face_labels.txt"), "r").readlines()
+with open(os.path.join(dataFold, "face_labels.pkl"), 'rb') as f:
+    class_names = pickle.load(f)
 
 # get the video capture
 cam = cv2.VideoCapture(0)
@@ -75,7 +76,7 @@ while cam.isOpened():
 
             # Display the label
             font = cv2.FONT_HERSHEY_SIMPLEX
-            cv2.putText(frame, f'{class_name[12:-3]} ({str(np.round(confidence_score * 100))[:-2]}%)', (x1_big, y1_big - 8),
+            cv2.putText(frame, f'{class_name} ({str(np.round(confidence_score * 100))[:-2]}%)', (x1_big, y1_big - 8),
                         font, 0.5, color, thickness, cv2.LINE_AA)
 
     # display the capture
