@@ -10,7 +10,7 @@ from Preprocessing import resize, crop
 BASE_DIR = os.getcwd()
 dataFold = os.path.join(BASE_DIR, "Data")
 dataSet = os.path.join(dataFold, "DataSet")
-VGG2 = os.path.join(dataSet, "VGG2")
+VGG2 = os.path.join(dataSet, "FaceSet")
 
 # create a dictionary with the peoples id and their associated name
 identity = {}
@@ -39,10 +39,12 @@ dataFiles = ["TestData", "TrainingData"]
 for dataFile in dataFiles:
     dataFilePath = os.path.join(dataSet, dataFile)
     for dirs in os.listdir(dataFilePath):
-        path = os.path.join(dataFilePath, dirs)
-        for file in os.listdir(path):
-            if file.endswith("png") or file.endswith("jpg") or file.endswith("json"):
-                os.remove(os.path.join(path, file))
+        people_path = os.path.join(dataFilePath, dirs)
+        for people in os.listdir(people_path):
+            path = os.path.join(people_path, people)
+            for file in os.listdir(path):
+                if file.endswith("png") or file.endswith("jpg") or file.endswith("json"):
+                    os.remove(os.path.join(path, file))
     print(f"files in {dataFile} removed")
 
 # make the training and test data
@@ -88,7 +90,7 @@ for dirs in os.listdir(VGG2):
                 label_file = file.split('.')[0] + '.json'
 
                 # distribute 80% of images into training images
-                if random.random() < 0.80:
+                if random.random() < 1:
                     trainingData = os.path.join(dataSet, "TrainingData")
                     image_path = os.path.join(trainingData, "Images")
                     label_path = os.path.join(trainingData, "Labels")

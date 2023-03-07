@@ -8,7 +8,7 @@ BASE_DIR = os.getcwd()
 dataFold = os.path.join(BASE_DIR, "Data")
 
 name = str(input("Enter your Name: ")).lower()
-newDataFold = os.path.join(dataFold, "DataSet", "VGG2", name)
+newDataFold = os.path.join(dataFold, "DataSet", "FaceSet", name)
 
 # create the new data directory if it does not exist
 if not os.path.exists(newDataFold):

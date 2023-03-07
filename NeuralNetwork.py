@@ -66,7 +66,7 @@ custom_vgg_model.compile(optimizer='Adam',
 custom_vgg_model.fit(train_generator,
                      batch_size=1,
                      verbose=1,
-                     epochs=100)
+                     epochs=60)
 
 # save the CNN in a h5 file
 custom_vgg_model.save(os.path.join(dataFold, "face_recognition_cnn.h5"))
