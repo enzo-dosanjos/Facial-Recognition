@@ -1,4 +1,5 @@
 make myself the face detection deep learning algorithm (VGG16)
 detect brightness in a picture and create an "increase_brightness" function
 crop the image on every faces in main
-
+use test data to test CNN accuracy
+use the whole VGG Face 2 dataset (takes a lot of time)
